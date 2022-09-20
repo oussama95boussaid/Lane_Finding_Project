@@ -32,6 +32,8 @@ dist = cameraCalibrationImgs["dist"]
 testImages = list(map(lambda imageFileName: (imageFileName, cv2.imread(imageFileName)), 
                       glob.glob('test_images/*.jpg')))
 
+"""imges readed in BGR """
+
 def showImages(images, cols = 4, rows = 2, figsize=(15,6)):
     """
     Display `images`.
