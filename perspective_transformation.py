@@ -28,11 +28,12 @@ dist = cameraCalibrationImgs["dist"]
 
 ! unzip test_images
 
-# Load test images.
+# Load test images using glob.
+# read test images using cv2.imread .
 testImages = list(map(lambda imageFileName: (imageFileName, cv2.imread(imageFileName)), 
                       glob.glob('test_images/st*.jpg')))
 
-# apply cal_undistortAndHlS function to testimages and pask the images in a list to show
+# convert test images to RGB to show
 Test_imgsToShow = []
 for fname in testImages:
     fileName, img = fname

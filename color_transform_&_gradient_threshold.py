@@ -28,7 +28,8 @@ dist = cameraCalibrationImgs["dist"]
 
 ! unzip test_images
 
-# Load test images.
+# Load test images using glob.
+# read test images using cv2.imread .
 testImages = list(map(lambda imageFileName: (imageFileName, cv2.imread(imageFileName)), 
                       glob.glob('test_images/*.jpg')))
 
@@ -48,7 +49,6 @@ def showImages(images, cols = 4, rows = 2, figsize=(15,6)):
             ax.axis('off')
 
 showImages(testImages)
-# plt.savefig("Test_Images.png")
 
 """**Undistort and color space**
 
