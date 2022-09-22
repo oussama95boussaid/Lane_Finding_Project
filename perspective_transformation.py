@@ -132,3 +132,56 @@ ax1.set_title('Original Image 2', fontsize=50)
 ax2.imshow(Undistorted_Warped_imgs[1])
 ax2.set_title('Undistorted and Warped Image', fontsize=50)
 plt.subplots_adjust(left=0., right=1, top=0.9, bottom=0.)
+
+"""# Step 3 :  **Finding the Lines: Histogram Peaks**
+
+"""
+
+Undistorted_Warped_imgs[1].shape
+
+import numpy as np
+import matplotlib.image as mpimg
+import matplotlib.pyplot as plt
+
+# Load our image
+# `mpimg.imread` will load .jpg as 0-255, so normalize back to 0-1
+img = Undistorted_Warped_imgs[1]/255
+
+
+def hist(img):
+    # Grab only the bottom half of the image
+    # Lane lines are likely to be mostly vertical nearest to the car
+    bottom_half = img[img.shape[0]//2:,:]
+
+    # Sum across image pixels vertically - make sure to set an `axis`
+    # i.e. the highest areas of vertical lines should be larger values
+    histogram = np.sum(bottom_half, axis=0)
+    
+    return histogram
+
+# Create histogram of image binary activations
+histogram = hist(img)
+
+# Visualize the resulting histogram
+plt.plot(histogram)
+# plt.savefig("hist-of-binary-image.png")
+
+def hls_select(img, thresh=(0, 255)):
+
+    '''
+    This function thresholds the S-channel of HLS
+
+    '''
+    hls = cv2.cvtColor(img, cv2.COLOR_BGR2HLS)
+    s_channel = hls[:,:,2]
+    binary_output = np.zeros_like(s_channel)
+    binary_output[(s_channel > thresh[0]) & (s_channel <= thresh[1])] = 1
+    return binary_output
+
+# Load our image
+binary_warped = hls_select(Undistorted_Warped_imgs[1])
+binary_warped = cv2.cvtColor(Undistorted_Warped_imgs[0], cv2.COLOR_RGB2GRAY)
+
+binary_warped.shape
+
+plt.imshow(binary_warped)
