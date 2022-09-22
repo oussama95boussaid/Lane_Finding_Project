@@ -52,7 +52,7 @@ def show_image(images,row,col):
 
 # show test images
 show_image(Test_imgsToShow,2,4)
-plt.savefig("Test_Images.png")
+# plt.savefig("Test_Images.png")
 
 def cal_undistort(img, mtx, dist) :
 
@@ -411,7 +411,7 @@ def draw(binary_warped,left_fit, right_fit, Minv) :
 
         # Generate x and y values for plotting
         ploty = np.linspace(0, binary_warped.shape[0]-1, binary_warped.shape[0] )
-        left_fitx = left_fit[0]*ploty**2 + left_fit[1]*ploty + left_fit[2]
+        left_fitx =( left_fit[0]*ploty**2 + left_fit[1]*ploty + left_fit[2])
         right_fitx = right_fit[0]*ploty**2 + right_fit[1]*ploty + right_fit[2]
 
         # Create an image to draw the lines on
@@ -454,29 +454,6 @@ def measure_curvature(left_fit_cr,right_fit_cr) :
 
     return left_curverad,right_curverad
 
-import numpy.polynomial.polynomial as poly
-
-def lanepos(left_fit,right_fit) :
-
-    # cover same y-range as image
-    ploty = np.linspace(0, 719, num=720)
-
-    # meters per pixel in x dimension
-    xm_per_pix = 3.7/700 
-
-    y_eval = np.max(ploty)
-   
-    left_fit = np.flip(left_fit,0)
-    right_fit = np.flip(right_fit,0)
-    leftl = poly.polyval(y_eval,left_fit)
-    rightl = poly.polyval(y_eval,right_fit)
-
-    center_road = leftl+((rightl-leftl)/2)
-    center_car = 660
-    caroff  = (center_car-center_road)*xm_per_pix
-
-    return leftl,rightl,caroff
-
 """**Find The Lanes** & **Draw The Frames**"""
 
 lanesOverlay = []
@@ -491,6 +468,10 @@ for img in Warped_imgs:
   laneOverlay = draw(out_img,left_fit,right_fit, Minv)
   lanesOverlay.append(laneOverlay)
 
+show_image(lanesOverlay,2,4)
+
+"""**Warp the detected lane boundaries back onto the original image.**"""
+
 # Combine the result with the original image
 imgLength = len(Undist_images)
 resultLines = []
@@ -499,7 +480,9 @@ for index in range(0,imgLength) :
   img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB )
   resultLines.append(img)
 
-"""**Determine the curvature of the lane and vehicle position**"""
+show_image(resultLines,2,4)
+
+"""**Determine the curvature of the lane**"""
 
 # Calculate the radius of curvature in meters for both lane lines
 curvatures_right = []
@@ -518,65 +501,30 @@ for img in Warped_imgs:
   curvatures_left.append(curvature_left)
   curvatures_right.append(curvature_right)
 
+"""**Output visual display of the lane boundaries and numerical estimation of lane curvature.**"""
+
 # Draw info
 imgLength = len(resultLines)
 for index in range(0,imgLength) :
-  cv2.putText(resultLines[index],"Radius of Left Curvature:  "+ '{:6.2f}km'.format(curvatures_left[index]), (50, 50), cv2.FONT_HERSHEY_SIMPLEX,1.0,[0,0,255],2, cv2.LINE_AA)
-  cv2.putText(resultLines[index],"Radius of right Curvature:  "+ '{:6.2f}km'.format(curvatures_right[index]), (50, 120), cv2.FONT_HERSHEY_SIMPLEX,1.0,[0,0,255],2, cv2.LINE_AA)
+  cv2.putText(resultLines[index],"Radius of Left Curvature:  "+ '{:6.2f} km'.format(curvatures_left[index]), (50, 50), cv2.FONT_HERSHEY_SIMPLEX,1.0,[0,0,255],2, cv2.LINE_AA)
+  cv2.putText(resultLines[index],"Radius of right Curvature:  "+ '{:6.2f} km'.format(curvatures_right[index]), (50, 120), cv2.FONT_HERSHEY_SIMPLEX,1.0,[0,0,255],2, cv2.LINE_AA)
 
 # the first warped image
 f, (ax1, ax2) = plt.subplots(1, 2, figsize=(24, 9))
 f.tight_layout()
-ax1.imshow(resultLines[0])
-ax1.set_title('Original Image 1', fontsize=50)
-ax2.imshow(resultLines[1])
-ax2.set_title('Undistorted and Warped Image', fontsize=50)
+ax1.imshow(resultLines[5])
+ax2.imshow(resultLines[4])
 plt.subplots_adjust(left=0., right=1, top=0.9, bottom=0.)
-
-def pipeline(img, fontScale=2):
-    """
-    Find and draw the lane lines on the image `img`.
-    """
-    # left_fit, right_fit, left_fit_m, right_fit_m, _, _, _, _, _ = findLines(img)
-    # output = drawLine(img, left_fit, right_fit)
-    
-    # # Calculate curvature
-    # leftCurvature = calculateCurvature(yRange, left_fit_m) 
-    # rightCurvature = calculateCurvature(yRange, right_fit_m)
-    
-    # # Calculate vehicle center
-    # xMax = img.shape[1]*xm_per_pix
-    # yMax = img.shape[0]*ym_per_pix
-    # vehicleCenter = xMax / 2
-    # lineLeft = left_fit_m[0]*yMax**2 + left_fit_m[1]*yMax + left_fit_m[2]
-    # lineRight = right_fit_m[0]*yMax**2 + right_fit_m[1]*yMax + right_fit_m[2]
-    # lineMiddle = lineLeft + (lineRight - lineLeft)/2
-    # diffFromVehicle = lineMiddle - vehicleCenter
-    # if diffFromVehicle > 0:
-    #     message = '{:.2f} m right'.format(diffFromVehicle)
-    # else:
-    #     message = '{:.2f} m left'.format(-diffFromVehicle)
-    
-    # Draw info
-    font = cv2.FONT_HERSHEY_SIMPLEX
-    fontColor = (255, 255, 255)
-    cv2.putText(output, 'Left curvature: {:.0f} m'.format(leftCurvature), (50, 50), font, fontScale, fontColor, 2)
-    cv2.putText(output, 'Right curvature: {:.0f} m'.format(rightCurvature), (50, 120), font, fontScale, fontColor, 2)
-    cv2.putText(output, 'Vehicle is {} of center'.format(message), (50, 190), font, fontScale, fontColor, 2)
-    return output
-
-cv2.cvtColor(pipeline(img), cv2.COLOR_BGR2RGB )
 
 """# **Video pipeline**"""
 
-from moviepy.editor import VideoFileClip
-
+callNext = False
 class Lane():
     def __init__(self):
         self.left_fit = None
         self.right_fit = None
-        self.left_fit_m = None
-        self.right_fit_m = None
+        self.left_fit_cr = None
+        self.right_fit_cr = None
         self.leftCurvature = None
         self.rightCurvature = None
 
@@ -584,75 +532,64 @@ def calculateLanes(img):
     """
     Calculates the lane on image `img`.
     """
-    left_fit, right_fit, left_fit_m, right_fit_m, _, _, _, _, _ = findLines(img)
-    # Calculate curvature
-    leftCurvature = calculateCurvature(yRange, left_fit_m) 
-    rightCurvature = calculateCurvature(yRange, right_fit_m)
-    
-    # Calculate vehicle center
-    xMax = img.shape[1]*xm_per_pix
-    yMax = img.shape[0]*ym_per_pix
-    vehicleCenter = xMax / 2
-    lineLeft = left_fit_m[0]*yMax**2 + left_fit_m[1]*yMax + left_fit_m[2]
-    lineRight = right_fit_m[0]*yMax**2 + right_fit_m[1]*yMax + right_fit_m[2]
-    lineMiddle = lineLeft + (lineRight - lineLeft)/2
-    diffFromVehicle = lineMiddle - vehicleCenter
-    
-    return (left_fit, right_fit, left_fit_m, right_fit_m, leftCurvature, rightCurvature, diffFromVehicle)
+    img = hls_select(img, thresh=(90, 255))
 
-def displayLanes(img, left_fit, right_fit, left_fit_m, right_fit_m, leftCurvature, rightCurvature, diffFromVehicle):
+    global callNext
+
+    if(callNext==False ) :
+       out_img,lf,rf,lcr,rcr = find_firstlane(img)
+       callNext = True
+
+    if(callNext) :
+       out_img,lf,rf,lcr,rcr = search_next_Lane(img,left_fit,right_fit)
+       
+    # Calculate curvature
+
+    (lcurve,rcurve) = measure_curvature(lcr,rcr)
+    curvature_left = lcurve/1000 
+    curvature_right = rcurve/1000
+
+    return (lf, rf, curvature_left, curvature_right)
+
+
+def displayLanes(out_img, left_fit, right_fit,leftCurvature, rightCurvature, Minv):
     """
     Display the lanes information on the image.
     """
-    output = drawLine(img, left_fit, right_fit)
-    
-    if diffFromVehicle > 0:
-        message = '{:.2f} m right'.format(diffFromVehicle)
-    else:
-        message = '{:.2f} m left'.format(-diffFromVehicle)
-    
+    laneDrowed = draw(out_img,left_fit,right_fit, Minv)
+    img = cv2.addWeighted(out_img, 1, laneDrowed, 0.3, 0)
+
     # Draw info
-    font = cv2.FONT_HERSHEY_SIMPLEX
-    fontColor = (255, 255, 255)
-    cv2.putText(output, 'Left curvature: {:.0f} m'.format(leftCurvature), (50, 50), font, 1, fontColor, 2)
-    cv2.putText(output, 'Right curvature: {:.0f} m'.format(rightCurvature), (50, 120), font, 1, fontColor, 2)
-    cv2.putText(output, 'Vehicle is {} of center'.format(message), (50, 190), font, 1, fontColor, 2)
-    return output
-    
-def videoPipeline(inputVideo, outputVideo):
+    cv2.putText(img,"Radius of Left Curvature:  "+ '{:6.2f} km'.format(leftCurvature), (50, 50), cv2.FONT_HERSHEY_SIMPLEX,1.0,[0,0,255],2, cv2.LINE_AA)
+    cv2.putText(img,"Radius of right Curvature:  "+ '{:6.2f} km'.format(rightCurvature), (50, 120), cv2.FONT_HERSHEY_SIMPLEX,1.0,[0,0,255],2, cv2.LINE_AA)
+
+    return img
+
+from moviepy.editor import VideoFileClip
+
+def videoPipeline(inputVideo, outputVideo,subC=None):
     """
-    Process the `inputVideo` frame by frame to find the lane lines, draw curvarute and vehicle position information and
+    Process the `inputVideo` frame by frame to find the lane lines, draw curvarute information and
     generate `outputVideo`
     """
     myclip = VideoFileClip(inputVideo)
-    
+
     leftLane = Lane()
     rightLane = Lane()
-    
-    def processImage(img):
-        left_fit, right_fit, left_fit_m, right_fit_m, leftCurvature, rightCurvature, diffFromVehicle = calculateLanes(img)
-        if leftCurvature > 10000:
-            left_fit = leftLane.left_fit
-            left_fit_m = leftLane.left_fit_m
-            leftCurvature = leftLane.leftCurvature
-        else:
-            leftLane.left_fit = left_fit
-            leftLane.left_fit_m = left_fit_m
-            leftLane.leftCurvature = leftCurvature
-        
-        if rightCurvature > 10000:
-            right_fit = rightLane.right_fit
-            right_fit_m = rightLane.right_fit_m
-            rightCurvature = rightLane.rightCurvature
-        else:
-            rightLane.right_fit = right_fit
-            rightLane.right_fit_m = right_fit_m
-            rightLane.rightCurvature = rightCurvature
-            
-        return displayLanes(img, left_fit, right_fit, left_fit_m, right_fit_m, leftCurvature, rightCurvature, diffFromVehicle)
 
-    clip = myclip.fl_image(processImage)
+    def processImage(img) :
+
+      left_fit, right_fit, curvature_left, curvature_right = calculateLanes(img)
+
+      result = displayLanes(img,left_fit, right_fit, curvature_left, curvature_right,Minv)
+
+      return result
+
+    if(subC != None) :
+        myclip = myclip.subclip(subC[0],subC[1])
+
+    
+    clip = myclip.fl_image(processImage) 
     clip.write_videofile(outputVideo, audio=False)
 
-# Project video
-videoPipeline('project_video.mp4', 'video_output/project_video.mp4')
+videoPipeline('project_video.mp4', 'project_video-final.mp4',subC=None)
