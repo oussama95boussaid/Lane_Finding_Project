@@ -565,6 +565,12 @@ def displayLanes(out_img, left_fit, right_fit,leftCurvature, rightCurvature, Min
 
     return img
 
+# !pip install moviepy
+
+# !pip3 install imageio==2.4.1
+
+# !pip install --upgrade imageio-ffmpeg
+
 from moviepy.editor import VideoFileClip
 
 def videoPipeline(inputVideo, outputVideo,subC=None):
@@ -592,4 +598,4 @@ def videoPipeline(inputVideo, outputVideo,subC=None):
     clip = myclip.fl_image(processImage) 
     clip.write_videofile(outputVideo, audio=False)
 
-videoPipeline('project_video.mp4', 'project_video-final.mp4',subC=None)
+videoPipeline('project_video.mp4', 'project_video_final.mp4',subC=None)
