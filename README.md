@@ -33,7 +33,7 @@ My project includes the following files :
 
 - <a href= "README.md">README.md</a> (writeup report) documentation of the results
 - <a href= "Camera_Calibration.ipynb">Camera_Calibration.ipynb</a> code for calibration of the camera
-- <a href= "Color_transform_&_Gradient_Threshold.ipynb">Color_transform_&_Gradient_Threshold.ipynb</a> code for correction of distortion & calculation of thresholds & color spaces
+- <a href= "Color_transform_&_Gradient_Threshold.ipynb">Color_transform_&_Gradient_Threshold.ipynb</a> code for correction of distortion & calculation of thresholds & Color transform
 - <a href= "Perspective_Transformation.ipynb">Perspective_Transformation.ipynb</a> code for perspective transformation
-- <a href= "Lane_Finding_Project.ipynb">Lane_Finding_Project.ipynb</a> Code fot all the project  
+- <a href= "Lane_Finding_Project.ipynb">Lane_Finding_Project.ipynb</a> Code for all the project  
 - <a href= "project_video_final.mp4">project video result</a>
