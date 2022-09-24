@@ -27,7 +27,7 @@ cameraCalibrationImgs = pickle.load( open( "Camera_Calibration.p", "rb" ) )
 mtx = cameraCalibrationImgs["mtx"]
 dist = cameraCalibrationImgs["dist"]
 
-! unzip test_images
+# ! unzip test_images
 
 # Load test images using glob.
 # read test images using cv2.imread .
@@ -224,6 +224,20 @@ show_image(dir_binary_imgs,2,4)
 
 """**Combining Thresholds**"""
 
+def Combining_Threshold(dir_binary,grad_binaryx,grad_binaryy,mag_binary,hls_select) :
+  Combining_Threshold_img = np.zeros_like(dir_binary) 
+  Combining_Threshold_img[((grad_binaryx == 1) & (grad_binaryy == 1)) | ((mag_binary == 1) & (dir_binary== 1)) | (hls_select == 1)] = 1
+
+  return Combining_Threshold_img
+
+imgLength = len(Undist_images)
+Combining_Thresholds_imgs = []
+for index in range(0,imgLength) :
+  Combining_Thresholds = Combining_Threshold(dir_binary_imgs[index],grad_binaryx_imgs[index],grad_binaryy_imgs[index],mag_binary_imgs[index],hls_select_imgs[index])
+  Combining_Thresholds_imgs.append(Combining_Thresholds)
+
+'''
+
 #create a binary image result
 imgLength = len(Undist_images)
 Combining_Thresholds_imgs = []
@@ -231,6 +245,9 @@ for index in range(0,imgLength) :
   Combining_Thresholds = np.zeros_like(dir_binary_imgs[index]) 
   Combining_Thresholds[((grad_binaryx_imgs[index] == 1) & (grad_binaryy_imgs[index] == 1)) | ((mag_binary_imgs[index] == 1) & (dir_binary_imgs[index] == 1)) | (hls_select_imgs[index] == 1)] = 1
   Combining_Thresholds_imgs.append(Combining_Thresholds)
+
+
+'''
 
 show_image(Combining_Thresholds_imgs,2,4)
 
@@ -514,8 +531,8 @@ for index in range(0,imgLength) :
 # the first warped image
 f, (ax1, ax2) = plt.subplots(1, 2, figsize=(24, 9))
 f.tight_layout()
-ax1.imshow(resultLines[5])
-ax2.imshow(resultLines[4])
+ax1.imshow(resultLines[6])
+ax2.imshow(resultLines[2])
 plt.subplots_adjust(left=0., right=1, top=0.9, bottom=0.)
 
 """# **Video pipeline**"""
@@ -526,7 +543,16 @@ def calculateLanes(img):
     """
     Calculates the lane on image `img`.
     """
-    img = hls_select(img, thresh=(90, 255))
+    imghls = hls_select(img, thresh=(90, 255))
+    grad_binaryx = abs_sobel_thresh(img, orient='x', thresh_min=20, thresh_max=100)
+    grad_binaryy = abs_sobel_thresh(img, orient='y', thresh_min=20, thresh_max=100)
+    mag_binary = mag_thresh(img, sobel_kernel=3, mag_thresh=(30, 170))
+    dir_binary = dir_threshold(img, sobel_kernel=15, thresh=(0.7, 1.3))
+
+    Combining_Thresholds = Combining_Threshold(dir_binary,grad_binaryx,grad_binaryy,mag_binary,imghls)
+
+    img,Minv = unwarp(Combining_Thresholds)
+
 
     global callNext
 
@@ -543,7 +569,7 @@ def calculateLanes(img):
     curvature_left = lcurve/1000 
     curvature_right = rcurve/1000
 
-    return (lf, rf, curvature_left, curvature_right)
+    return (lf, rf, curvature_left, curvature_right,Minv)
 
 
 def displayLanes(out_img, left_fit, right_fit,leftCurvature, rightCurvature, Minv):
@@ -563,8 +589,6 @@ def displayLanes(out_img, left_fit, right_fit,leftCurvature, rightCurvature, Min
 
 # !pip3 install imageio==2.4.1
 
-# !pip install --upgrade imageio-ffmpeg
-
 from moviepy.editor import VideoFileClip
 
 def videoPipeline(inputVideo, outputVideo,subC=None):
@@ -574,12 +598,10 @@ def videoPipeline(inputVideo, outputVideo,subC=None):
     """
     myclip = VideoFileClip(inputVideo)
 
-    leftLane = Lane()
-    rightLane = Lane()
 
     def processImage(img) :
 
-      left_fit, right_fit, curvature_left, curvature_right = calculateLanes(img)
+      left_fit, right_fit, curvature_left, curvature_right,Minv = calculateLanes(img)
 
       result = displayLanes(img,left_fit, right_fit, curvature_left, curvature_right,Minv)
 
