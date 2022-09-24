@@ -5,3 +5,11 @@ The goal of this project is to create a powerful pipeline to detect lane lines w
 <img src ="output_images/output.png">
 
 # Dependencies
+
+To execute the pipeline, the following dependencies are necessary:
+
+- numpy
+- cv2
+- glob
+- matplotlib
+- moviepy.editor
