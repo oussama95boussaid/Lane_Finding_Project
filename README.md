@@ -6,7 +6,7 @@ The goal of this project is to create a powerful pipeline to detect lane lines w
 
 # Dependencies
 
-To execute the pipeline, the following dependencies are necessary:
+**To execute the pipeline, the following dependencies are necessary:**
 
 - numpy
 - cv2
@@ -14,6 +14,7 @@ To execute the pipeline, the following dependencies are necessary:
 - matplotlib
 - moviepy.editor
 
+# The Project
 
 **The goals / steps of this project are the following:**
 
