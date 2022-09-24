@@ -31,7 +31,7 @@ The goal of this project is to create a powerful pipeline to detect lane lines w
 
 My project includes the following files :
 
-- README.md (writeup report) documentation of the results
+- <a href= "README.md">README.md</a> (writeup report) documentation of the results
 pipeline.py contains the pipeline for lane line detection
 camera_calibration.py code for calibration of the camera
 undistorter.py code for correction of distortion
