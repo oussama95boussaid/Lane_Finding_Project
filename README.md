@@ -30,3 +30,14 @@ The goal of this project is to create a powerful pipeline to detect lane lines w
 **Overview of Files :**
 
 My project includes the following files :
+
+- README.md (writeup report) documentation of the results
+pipeline.py contains the pipeline for lane line detection
+camera_calibration.py code for calibration of the camera
+undistorter.py code for correction of distortion
+threshold.py code for calculation of thresholds
+perspective_trafo.py code for perspective transformation
+lanefinder.py code for finding and drawing lane lines
+curvatuere.py code for calculation of curvature and the position of the car within the lane lines
+image_util.py code for loading and saving images and for calculation of the visalization of original and processed images.
+project video result
