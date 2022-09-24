@@ -543,11 +543,13 @@ def calculateLanes(img):
     """
     Calculates the lane on image `img`.
     """
-    imghls = hls_select(img, thresh=(90, 255))
-    grad_binaryx = abs_sobel_thresh(img, orient='x', thresh_min=20, thresh_max=100)
-    grad_binaryy = abs_sobel_thresh(img, orient='y', thresh_min=20, thresh_max=100)
-    mag_binary = mag_thresh(img, sobel_kernel=3, mag_thresh=(30, 170))
-    dir_binary = dir_threshold(img, sobel_kernel=15, thresh=(0.7, 1.3))
+    Undist = cal_undistort(img, mtx, dist)
+
+    imghls = hls_select(Undist, thresh=(90, 255))
+    grad_binaryx = abs_sobel_thresh(Undist, orient='x', thresh_min=20, thresh_max=100)
+    grad_binaryy = abs_sobel_thresh(Undist, orient='y', thresh_min=20, thresh_max=100)
+    mag_binary = mag_thresh(Undist, sobel_kernel=3, mag_thresh=(30, 170))
+    dir_binary = dir_threshold(Undist, sobel_kernel=15, thresh=(0.7, 1.3))
 
     Combining_Thresholds = Combining_Threshold(dir_binary,grad_binaryx,grad_binaryy,mag_binary,imghls)
 
@@ -569,15 +571,15 @@ def calculateLanes(img):
     curvature_left = lcurve/1000 
     curvature_right = rcurve/1000
 
-    return (lf, rf, curvature_left, curvature_right,Minv)
+    return (Undist,out_img,lf, rf, curvature_left, curvature_right,Minv)
 
 
-def displayLanes(out_img, left_fit, right_fit,leftCurvature, rightCurvature, Minv):
+def displayLanes(Undist,out_img, left_fit, right_fit,leftCurvature, rightCurvature, Minv):
     """
     Display the lanes information on the image.
     """
     laneDrowed = draw(out_img,left_fit,right_fit, Minv)
-    img = cv2.addWeighted(out_img, 1, laneDrowed, 0.3, 0)
+    img = cv2.addWeighted(Undist, 1, laneDrowed, 0.3, 0)
 
     # Draw info
     cv2.putText(img,"Radius of Left Curvature:  "+ '{:6.2f} km'.format(leftCurvature), (50, 50), cv2.FONT_HERSHEY_SIMPLEX,1.0,[0,0,255],2, cv2.LINE_AA)
@@ -601,9 +603,9 @@ def videoPipeline(inputVideo, outputVideo,subC=None):
 
     def processImage(img) :
 
-      left_fit, right_fit, curvature_left, curvature_right,Minv = calculateLanes(img)
+      Undist,out_img,left_fit, right_fit, curvature_left, curvature_right,Minv = calculateLanes(img)
 
-      result = displayLanes(img,left_fit, right_fit, curvature_left, curvature_right,Minv)
+      result = displayLanes(Undist,out_img,left_fit, right_fit, curvature_left, curvature_right,Minv)
 
       return result
 
