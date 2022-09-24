@@ -4,9 +4,9 @@ The goal of this project is to create a powerful pipeline to detect lane lines w
 
 <img src ="output_images/output.png">
 
-# Dependencies
+# Dependencies 
 
-**To execute the pipeline, the following dependencies are necessary:**
+**To execute the pipeline, the following dependencies are necessary :**
 
 - numpy
 - cv2
@@ -16,7 +16,7 @@ The goal of this project is to create a powerful pipeline to detect lane lines w
 
 # The Project
 
-**The goals / steps of this project are the following:**
+**The goals / steps of this project are the following :**
 
 - Compute the camera calibration matrix and distortion coefficients given a set of chessboard images.
 - Apply a distortion correction to raw images.
@@ -27,6 +27,6 @@ The goal of this project is to create a powerful pipeline to detect lane lines w
 - Warp the detected lane boundaries back onto the original image.
 - Output visual display of the lane boundaries and numerical estimation of lane curvature and vehicle position.
 
-**Overview of Files**
+**Overview of Files :**
 
-
+My project includes the following files :
