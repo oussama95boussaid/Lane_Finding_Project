@@ -27,7 +27,7 @@ cameraCalibrationImgs = pickle.load( open( "Camera_Calibration.p", "rb" ) )
 mtx = cameraCalibrationImgs["mtx"]
 dist = cameraCalibrationImgs["dist"]
 
-# ! unzip test_images
+! unzip test_images
 
 # Load test images using glob.
 # read test images using cv2.imread .
@@ -488,6 +488,7 @@ for img in Warped_imgs:
   lanesOverlay.append(laneOverlay)
 
 show_image(lanesOverlay,2,4)
+# plt.savefig("Find_The_Lanes_&_Draw_The_Frames.png")
 
 """**Warp the detected lane boundaries back onto the original image.**"""
 
@@ -500,6 +501,7 @@ for index in range(0,imgLength) :
   resultLines.append(img)
 
 show_image(resultLines,2,4)
+# plt.savefig("lane_detected.png")
 
 """**Determine the curvature of the lane**"""
 
@@ -529,11 +531,15 @@ for index in range(0,imgLength) :
   cv2.putText(resultLines[index],"Radius of right Curvature:  "+ '{:6.2f} km'.format(curvatures_right[index]), (50, 120), cv2.FONT_HERSHEY_SIMPLEX,1.0,[0,0,255],2, cv2.LINE_AA)
 
 # the first warped image
+
 f, (ax1, ax2) = plt.subplots(1, 2, figsize=(24, 9))
 f.tight_layout()
-ax1.imshow(resultLines[6])
-ax2.imshow(resultLines[2])
+ax1.imshow(Test_imgsToShow[6])
+ax1.set_title('Original Image', fontsize=50)
+ax2.imshow(resultLines[6])
+ax2.set_title('output image', fontsize=50)
 plt.subplots_adjust(left=0., right=1, top=0.9, bottom=0.)
+# plt.savefig("output.png")
 
 """# **Video pipeline**"""
 
