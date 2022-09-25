@@ -59,4 +59,8 @@ The camera calibration and distortion coefficients are stored using pickle to be
 
 # Pipeline (single images)
 
+I am now going to describe the pipeline each images goes through in order to detect the lines. I am going to display images to illustrate each steps of the way.
+
 **1. Distortion correction**
+
+The pictures of the chessboard were taken with the same camera as the one mounted on the car that took every pictures and videos that were provided for this project. Therefore, after calibrating the camera on the chessboard, we can use the same coefficients to undistort every images and videos of the road.
