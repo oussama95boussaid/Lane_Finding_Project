@@ -58,3 +58,5 @@ I then used the output objpoints and imgpoints to compute the camera calibration
 The camera calibration and distortion coefficients are stored using pickle to be used on <a href= "Lane_Finding_Project.ipynb">the main notebook</a>
 
 # Pipeline (single images)
+
+**1. Distortion correction**
