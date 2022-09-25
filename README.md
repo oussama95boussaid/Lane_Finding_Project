@@ -85,7 +85,6 @@ Since the lines can be yellow and white, I chose to detect the lane lines by col
 
 The following image shows how I extract the yellow lines:
 
-<img src ="output_images/HLS-color_Images
-.png">
+<img src ="output_images/HLS-color_Images.png">
 
 
