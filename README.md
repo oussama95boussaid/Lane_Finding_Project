@@ -81,4 +81,4 @@ I used a combination of color and gradient thresholds to generate a binary image
 
 **2.1 Color thresholding**
 
-
+Since the lines can be yellow and white, I chose to detect the lane lines by color as well. The S (Sue) channel of the HLS color space can be well suited for extracting a particular color.The following image shows how I extract the yellow lines:
