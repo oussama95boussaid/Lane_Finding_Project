@@ -79,4 +79,4 @@ Using the camera matrix and distortion coefficients produced in the previous ste
 
 I used a combination of color and gradient thresholds to generate a binary image where every non-zeros pixels have a high probability of being part of a lane line.
 
-**a. Color thresholding**
+**1.1 Color thresholding**
