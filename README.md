@@ -73,5 +73,5 @@ The pictures of the chessboard were taken with the same camera as the one mounte
 
 Using the camera matrix and distortion coefficients produced in the previous step, Here is the result after undistorting an image  using the OpenCV **undistort()** function.
 
-<img src ="output_images/undistorted.png">
+<img src ="output_images/Undistorted_Image.png">
 
