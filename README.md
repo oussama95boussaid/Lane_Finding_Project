@@ -77,6 +77,8 @@ Using the camera matrix and distortion coefficients produced in the previous ste
 
 **2. Lane detection**
 
-I used a combination of color and gradient thresholds to generate a binary image where every non-zeros pixels have a high probability of being part of a lane line.
+I used a combination of color and gradient thresholds to generate a binary image where every non-zeros pixels have a high probability of being part of a lane line,In an order word to filter out potential noise (such as shadows, different color lanes, other cars, etc)
 
-**1.1 Color thresholding**
+**2.1 Color thresholding**
+
+
