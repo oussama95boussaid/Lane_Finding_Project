@@ -75,3 +75,5 @@ Using the camera matrix and distortion coefficients produced in the previous ste
 
 <img src ="output_images/Undistorted_Image.png">
 
+**2. Lane detection**
+
