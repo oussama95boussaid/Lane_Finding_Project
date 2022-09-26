@@ -95,6 +95,7 @@ To extract the white color, I would chose the L channel and threshold between 20
 
 We can observe that the white detecting picture detect the right line more accurately.
 
+
 **2.2 Sobel operator**
 
 A Sobel operator is an edge-detection algorithm that computed and detect high gradient in a given direction by doing a 2-D convolution over the image
@@ -110,6 +111,21 @@ Thresholded y-derivative
 
 <img src ="output_images/Thresholded_y-derivative.png">
 
+
 **2.3 Gradient magnitude**
+
+(apply a threshold to the overall magnitude of the gradient, in both x and y.)
+
+The magnitude, or absolute value, of the gradient is just the square root of the squares of the individual x and y gradients. For a gradient in both the xx and yy directions, the magnitude is the square root of the sum of the squares.
+
+abs_sobelx = sqrt{(sobel_x)^2}
+
+abs_sobely = sqrt{(sobel_y)^2}
+
+abs_sobelxy = sqrt{(sobel_x)^2+(sobel_y)^2} 
+
+I apply a threshold on the magnitude of the gradient to filter out weak signals
+
+<img src ="output_images/Thresholded_y-derivative.png">
 
 
