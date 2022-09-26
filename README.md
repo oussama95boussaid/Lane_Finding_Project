@@ -110,3 +110,6 @@ Thresholded y-derivative
 
 <img src ="output_images/Thresholded_y-derivative.png">
 
+**2.3 Gradient magnitude**
+
+
