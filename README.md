@@ -166,14 +166,10 @@ A perspective transform maps the points in a given image to a different, desired
 
 The **unwarp()** function takes as inputs an image (img), and runs **cv2.warpPerspective()** using the follwing source **(src)** and destination **(dst)** points.I chose the source points and destination points used to perform the transform by analyzing different test images :
 
-src = np.float32(
-
+    src = np.float32(
     [[(img_size[0] / 2) - 62, img_size[1] / 2 + 100],
-    
     [((img_size[0] / 6) - 10), img_size[1]],
-    
     [(img_size[0] * 5 / 6) + 60, img_size[1]],
-    
     [(img_size[0] / 2 + 62), img_size[1] / 2 + 100]])
     
     
