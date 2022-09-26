@@ -135,13 +135,7 @@ In the case of lane lines, i'm interested only in edges of a particular orientat
 
 The direction of the gradient is simply the inverse tangent (arctangent) of the yy gradient divided by the xx gradient:
 
-arctan{(sobel_y/sobel_x)}arctan(sobel 
-y
-​
- /sobel 
-x
-​
- ).
+arctan(sobel_y/sobel_x)
 
 Each pixel of the resulting image contains a value for the angle of the gradient away from horizontal in units of radians, covering a range of −π/2 to π/2. 
 
