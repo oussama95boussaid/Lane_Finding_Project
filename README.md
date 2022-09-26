@@ -91,6 +91,6 @@ I found that extracting only the pixels between 90 and 255 would suit this probl
 
 To extract the white color, I would chose the L channel and threshold between 200 and 255.
 
-<img src ="output_images/HLS-L-color_Images.png">
+<img src ="output_images/L-color_Images.png">
 
 We can observe that the white detecting picture detect the right line more accurately.
