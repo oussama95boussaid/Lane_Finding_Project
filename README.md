@@ -99,3 +99,5 @@ We can observe that the white detecting picture detect the right line more accur
 
 A Sobel operator is an edge-detection algorithm that computed and detect high gradient in a given direction by doing a 2-D convolution over the image
 (Applying the Sobel operator to an image is a way of taking the derivative of the image in the x or y direction.)
+
+In this case, I chose to detect pixels which luminance (channel L of HLS color space) returns a high gradient in the x direction since the lines I am trying to detect are generally vertical in the image.
