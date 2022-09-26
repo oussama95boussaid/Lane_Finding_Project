@@ -129,3 +129,6 @@ I apply a threshold on the magnitude of the gradient to filter out weak signals
 <img src ="output_images/Thresholded_Magnitude.png">
 
 
+**2.3 Direction of the Gradient**
+
+I apply a threshold on the direction of the gradient in order to filter out horizonal lines, as the lane lines should be relatively vertical.
