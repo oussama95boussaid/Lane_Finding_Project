@@ -61,6 +61,8 @@ The camera calibration and distortion coefficients are stored using pickle to be
 
 I am now going to describe the pipeline each images goes through in order to detect the lines. I am going to display images to illustrate each steps of the way.
 
+The code for this step  in the file called <a href= "Color_transform_&_Gradient_Threshold.ipynb">Color_transform_&_Gradient_Threshold.ipynb</a>.
+
 Here an exmples of images that I am going to use :
 
 <img src ="output_images/Test_Images.png">
@@ -91,6 +93,119 @@ I found that extracting only the pixels between 90 and 255 would suit this probl
 
 To extract the white color, I would chose the L channel and threshold between 200 and 255.
 
-<img src ="output_images/HLS-L-color_Images.png">
+<img src ="output_images/L-color_Images.png">
 
 We can observe that the white detecting picture detect the right line more accurately.
+
+
+**2.2 Sobel operator**
+
+A Sobel operator is an edge-detection algorithm that computed and detect high gradient in a given direction by doing a 2-D convolution over the image
+(Applying the Sobel operator to an image is a way of taking the derivative of the image in the x or y direction.)
+
+In this case, I chose to detect pixels which luminance (channel L of HLS color space) returns a high gradient in the x direction since the lines I am trying to detect are generally vertical in the image.
+
+Thresholded x-derivative
+
+<img src ="output_images/Thresholded_x-derivative.png">
+
+Thresholded y-derivative
+
+<img src ="output_images/Thresholded_y-derivative.png">
+
+
+**2.3 Gradient magnitude**
+
+(apply a threshold to the overall magnitude of the gradient, in both x and y.)
+
+The magnitude, or absolute value, of the gradient is just the square root of the squares of the individual x and y gradients. For a gradient in both the xx and yy directions, the magnitude is the square root of the sum of the squares.
+
+abs_sobelx = sqrt{(sobel_x)^2}
+
+abs_sobely = sqrt{(sobel_y)^2}
+
+abs_sobelxy = sqrt{(sobel_x)^2+(sobel_y)^2} 
+
+I apply a threshold on the magnitude of the gradient to filter out weak signals
+
+<img src ="output_images/Thresholded_Magnitude.png">
+
+
+**2.3 Direction of the Gradient**
+
+In the case of lane lines, i'm interested only in edges of a particular orientation. So now i will explore the direction, or orientation, of the gradient.
+
+The direction of the gradient is simply the inverse tangent (arctangent) of the yy gradient divided by the xx gradient :
+
+**arctan(sobel_y/sobel_x)**
+
+Each pixel of the resulting image contains a value for the angle of the gradient away from horizontal in units of radians, covering a range of **−π/2 to π/2**. 
+
+<img src ="output_images/Thresholded_Grad_Dir.png">
+
+**2.4 Combining Thresholds**
+
+(use various aspects of your gradient measurements (x, y, magnitude, direction) to isolate lane-line pixels)  to generate a binary image
+
+I'used thresholds of the x and y gradients, the overall gradient magnitude, and the gradient direction to focus on pixels that are likely to be part of the lane lines.
+
+<img src ="output_images/Combining_Thresholds.png">
+
+
+**3. Perspective Transformation**
+
+The perspective transformation code could be found on <a href= "Perspective_Transformation.ipynb">Perspective_Transformation.ipynb</a> notebook. 
+
+The image used were the one with straight lane lines:
+
+<img src ="output_images/straight_lines_imgsTest.png">
+
+Since we want to detect the curvature of the lines, we need to change the perspective of the image. OpenCV comes very handy at doing so
+
+A perspective transform maps the points in a given image to a different, desired, image points with a new perspective. I use the OpenCV functions **getPerspectiveTransform()** and **warpPerspective()** to generate a bird's-eye view of a lane from above, which is useful for calculating the lane curvature.
+
+The **unwarp()** function takes as inputs an image (img), and runs **cv2.warpPerspective()** using the follwing source **(src)** and destination **(dst)** points.I chose the source points and destination points used to perform the transform by analyzing different test images :
+
+    // img_size = (720, 1280)
+    
+    src = np.float32(
+    [[(img_size[0] / 2) - 62, img_size[1] / 2 + 100],
+    [((img_size[0] / 6) - 10), img_size[1]],
+    [(img_size[0] * 5 / 6) + 60, img_size[1]],
+    [(img_size[0] / 2 + 62), img_size[1] / 2 + 100]])
+    
+    dst = np.float32(
+    [[(img_size[0] / 4), 0],
+    [(img_size[0] / 4), img_size[1]],
+    [(img_size[0] * 3 / 4), img_size[1]],
+    [(img_size[0] * 3 / 4), 0]])
+    
+    
+ This resulted in the following source and destination points:
+ 
+ <table>
+
+  <tr>
+<th>Source</th>
+    <td>578, 460</td>
+    <td>203, 720</td>
+    <td>1127, 720</td>
+	<td>702, 460</td>
+
+  </tr>
+  <tr>
+	  <th>Destination</th>
+    <td>320, 0</td>
+    <td>320, 720</td>
+    <td>960, 720</td>
+	      <td>960, 0</td>
+
+  </tr>
+</table>
+
+I verified that my perspective transform was working as expected by drawing the src and dst points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
+
+<img src ="output_images/Undistorted_ Warped.png">
+
+	
+	
