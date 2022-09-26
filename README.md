@@ -152,4 +152,4 @@ I'used thresholds of the x and y gradients, the overall gradient magnitude, and 
 <img src ="output_images/Combining_Thresholds.png">
 
 
-**3. Perspective transform**
+**3. Perspective Transformation**
