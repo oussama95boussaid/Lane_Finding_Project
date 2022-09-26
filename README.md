@@ -161,3 +161,7 @@ The image used were the one with straight lane lines:
 <img src ="output_images/straight_lines_imgsTest.png">
 
 Since we want to detect the curvature of the lines, we need to change the perspective of the image. OpenCV comes very handy at doing so
+
+A perspective transform maps the points in a given image to a different, desired, image points with a new perspective. I use the OpenCV functions **getPerspectiveTransform()** and **warpPerspective()** to generate a bird's-eye view of a lane from above, which is useful for calculating the lane curvature.
+
+The **unwarp()** function takes as inputs an image (img), and runs **cv2.warpPerspective()** using the follwing source **(src)** and destination **(dst)** points.I chose the source points and destination points used to perform the transform by analyzing different test images :
