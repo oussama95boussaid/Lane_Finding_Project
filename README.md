@@ -126,6 +126,6 @@ abs_sobelxy = sqrt{(sobel_x)^2+(sobel_y)^2}
 
 I apply a threshold on the magnitude of the gradient to filter out weak signals
 
-<img src ="output_images/Thresholded_y-derivative.png">
+<img src ="output_images/Thresholded_Magnitude.png">
 
 
