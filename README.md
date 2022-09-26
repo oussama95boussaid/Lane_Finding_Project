@@ -61,6 +61,8 @@ The camera calibration and distortion coefficients are stored using pickle to be
 
 I am now going to describe the pipeline each images goes through in order to detect the lines. I am going to display images to illustrate each steps of the way.
 
+The code for this step  in the file called <a href= "Color_transform_&_Gradient_Threshold.ipynb">Color_transform_&_Gradient_Threshold.ipynb</a>.
+
 Here an exmples of images that I am going to use :
 
 <img src ="output_images/Test_Images.png">
@@ -143,8 +145,11 @@ Each pixel of the resulting image contains a value for the angle of the gradient
 
 **2.4 Combining Thresholds**
 
-(use various aspects of your gradient measurements (x, y, magnitude, direction) to isolate lane-line pixels)
+(use various aspects of your gradient measurements (x, y, magnitude, direction) to isolate lane-line pixels)  to generate a binary image
 
 I'used thresholds of the x and y gradients, the overall gradient magnitude, and the gradient direction to focus on pixels that are likely to be part of the lane lines.
 
 <img src ="output_images/Combining_Thresholds.png">
+
+
+**3. Perspective transform**
