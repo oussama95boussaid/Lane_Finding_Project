@@ -133,10 +133,11 @@ I apply a threshold on the magnitude of the gradient to filter out weak signals
 
 In the case of lane lines, i'm interested only in edges of a particular orientation. So now i will explore the direction, or orientation, of the gradient.
 
-The direction of the gradient is simply the inverse tangent (arctangent) of the yy gradient divided by the xx gradient:
+The direction of the gradient is simply the inverse tangent (arctangent) of the yy gradient divided by the xx gradient :
 
-arctan(sobel_y/sobel_x)
+**arctan(sobel_y/sobel_x)**
 
-Each pixel of the resulting image contains a value for the angle of the gradient away from horizontal in units of radians, covering a range of −π/2 to π/2. 
+Each pixel of the resulting image contains a value for the angle of the gradient away from horizontal in units of radians, covering a range of **−π/2 to π/2**. 
 
-I apply a threshold on the direction of the gradient in order to filter out horizonal lines, as the lane lines should be relatively vertical.
+<img src ="output_images/Thresholded_Grad_Dir.png">
+
