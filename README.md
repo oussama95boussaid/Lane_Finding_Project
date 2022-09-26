@@ -202,6 +202,10 @@ The **unwarp()** function takes as inputs an image (img), and runs **cv2.warpPer
 
   </tr>
 </table>
-	
+
+I verified that my perspective transform was working as expected by drawing the src and dst points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
+
+<img src ="output_images/Undistorted_ Warped.png">
+
 	
 	
