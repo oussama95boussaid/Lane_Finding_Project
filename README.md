@@ -184,11 +184,9 @@ The **unwarp()** function takes as inputs an image (img), and runs **cv2.warpPer
  This resulted in the following source and destination points:
  
  <table>
+
   <tr>
-    <th>Source</th>
-    <th>Destination</th>
-  </tr>
-  <tr>
+<th>Source</th>
     <td>578, 460</td>
     <td>203, 720</td>
     <td>1127, 720</td>
@@ -196,10 +194,11 @@ The **unwarp()** function takes as inputs an image (img), and runs **cv2.warpPer
 
   </tr>
   <tr>
+	  <th>Destination</th>
     <td>320, 0</td>
     <td>320, 720</td>
     <td>960, 720</td>
-	      <td>960, 0	</td>
+	      <td>960, 0</td>
 
   </tr>
 </table>
