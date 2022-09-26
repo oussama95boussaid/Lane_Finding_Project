@@ -27,7 +27,7 @@ cameraCalibrationImgs = pickle.load( open( "Camera_Calibration.p", "rb" ) )
 mtx = cameraCalibrationImgs["mtx"]
 dist = cameraCalibrationImgs["dist"]
 
-! unzip test_images
+# ! unzip test_images
 
 # Load test images using glob.
 # read test images using cv2.imread .
@@ -81,6 +81,7 @@ ax1.set_title('Original Image', fontsize=50)
 ax2.imshow(cv2.cvtColor(Undist_images[0], cv2.COLOR_BGR2RGB))
 ax2.set_title('Undistorted Image', fontsize=50)
 plt.subplots_adjust(left=0., right=1, top=0.9, bottom=0.)
+plt.savefig("Undistorted_Image.png")
 
 """# **Gradient Threshold**
 
@@ -98,7 +99,7 @@ def hls_select(img, thresh=(0, 255)):
     This function thresholds the S-channel of HLS
 
     '''
-    hls = cv2.cvtColor(img, cv2.COLOR_BGR2HLS)
+    hls = cv2.cvtColor(img, cv2.COLOR_RGB2HLS)
     s_channel = hls[:,:,2]
     binary_output = np.zeros_like(s_channel)
     binary_output[(s_channel > thresh[0]) & (s_channel <= thresh[1])] = 1
@@ -123,8 +124,12 @@ def abs_sobel_thresh(img, orient='x', thresh_min=0, thresh_max=255):
     returning a binary image [0, 255].
 
     ''' 
-    # Convert to grayscale
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    # Convert to HLS color space and get the J channel
+    hls = cv2.cvtColor(img, cv2.COLOR_RGB2HLS)
+    l_channel = hls[:,:,1]
+
+    gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+
     # Apply x or y gradient with the OpenCV Sobel() function
     # and take the absolute value
     if orient == 'x':
@@ -165,11 +170,12 @@ def mag_thresh(img, sobel_kernel=3, mag_thresh=(0, 255)):
     This function  return the magnitude of the gradient for a given sobel kernel size and threshold values
 
     '''
-    # Convert to grayscale
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    # Convert to HLS color space and get the J channel
+    hls = cv2.cvtColor(img, cv2.COLOR_RGB2HLS)
+    l_channel = hls[:,:,1]
     # Take both Sobel x and y gradients
-    sobelx = cv2.Sobel(gray, cv2.CV_64F, 1, 0, ksize=sobel_kernel)
-    sobely = cv2.Sobel(gray, cv2.CV_64F, 0, 1, ksize=sobel_kernel)
+    sobelx = cv2.Sobel(l_channel, cv2.CV_64F, 1, 0, ksize=sobel_kernel)
+    sobely = cv2.Sobel(l_channel, cv2.CV_64F, 0, 1, ksize=sobel_kernel)
     # Calculate the gradient magnitude
     gradmag = np.sqrt(sobelx**2 + sobely**2)
     # Rescale to 8 bit
@@ -199,11 +205,12 @@ def dir_threshold(img, sobel_kernel=3, thresh=(0, np.pi/2)):
     This function is  to threshold an image for a given range and Sobel kernel
 
     '''
-    # Grayscale
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    # Convert to HLS color space and get the J channel
+    hls = cv2.cvtColor(img, cv2.COLOR_RGB2HLS)
+    l_channel = hls[:,:,1]
     # Calculate the x and y gradients
-    sobelx = cv2.Sobel(gray, cv2.CV_64F, 1, 0, ksize=sobel_kernel)
-    sobely = cv2.Sobel(gray, cv2.CV_64F, 0, 1, ksize=sobel_kernel)
+    sobelx = cv2.Sobel(l_channel, cv2.CV_64F, 1, 0, ksize=sobel_kernel)
+    sobely = cv2.Sobel(l_channel, cv2.CV_64F, 0, 1, ksize=sobel_kernel)
     # Take the absolute value of the gradient direction, 
     # apply a threshold, and create a binary image result
     absgraddir = np.arctan2(np.absolute(sobely), np.absolute(sobelx))
@@ -227,6 +234,13 @@ show_image(dir_binary_imgs,2,4)
 def Combining_Threshold(dir_binary,grad_binaryx,grad_binaryy,mag_binary,hls_select) :
   Combining_Threshold_img = np.zeros_like(dir_binary) 
   Combining_Threshold_img[((grad_binaryx == 1) & (grad_binaryy == 1)) | ((mag_binary == 1) & (dir_binary== 1)) | (hls_select == 1)] = 1
+
+  return Combining_Threshold_img
+
+# I combined just grad_binaryx & grad_binaryy & hls_select
+def Combining_Threshold_stream(dir_binary,grad_binaryx,grad_binaryy,mag_binary,hls_select) :
+  Combining_Threshold_img = np.zeros_like(grad_binaryx) 
+  Combining_Threshold_img[((grad_binaryx == 1) & (grad_binaryy== 1)) | (hls_select == 1)] = 1
 
   return Combining_Threshold_img
 
@@ -290,9 +304,9 @@ for img in Combining_Thresholds_imgs:
 # the first warped image
 f, (ax1, ax2) = plt.subplots(1, 2, figsize=(24, 9))
 f.tight_layout()
-ax1.imshow(Test_imgsToShow[0])
+ax1.imshow(Test_imgsToShow[4])
 ax1.set_title('Original Image 1', fontsize=50)
-ax2.imshow(Warped_imgs[0])
+ax2.imshow(Warped_imgs[4])
 ax2.set_title('Undistorted and Warped Image', fontsize=50)
 plt.subplots_adjust(left=0., right=1, top=0.9, bottom=0.)
 
@@ -557,9 +571,11 @@ def calculateLanes(img):
     mag_binary = mag_thresh(Undist, sobel_kernel=3, mag_thresh=(30, 170))
     dir_binary = dir_threshold(Undist, sobel_kernel=15, thresh=(0.7, 1.3))
 
-    Combining_Thresholds = Combining_Threshold(dir_binary,grad_binaryx,grad_binaryy,mag_binary,imghls)
+    Combining_Threshold_st = Combining_Threshold_stream(dir_binary,grad_binaryx,grad_binaryy,mag_binary,imghls)
 
-    img,Minv = unwarp(Combining_Thresholds)
+    # Combining_Thresholds = Combining_Threshold(dir_binary,grad_binaryx,grad_binaryy,mag_binary,imghls)
+
+    img,Minv = unwarp(Combining_Threshold_st)
 
 
     global callNext
