@@ -93,3 +93,4 @@ To extract the white color, I would chose the L channel and threshold between 20
 
 <img src ="output_images/HLS-L-color_Images.png">
 
+We can observe that the white detecting picture detect the right line more accurately.
