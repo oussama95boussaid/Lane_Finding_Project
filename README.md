@@ -94,3 +94,8 @@ To extract the white color, I would chose the L channel and threshold between 20
 <img src ="output_images/L-color_Images.png">
 
 We can observe that the white detecting picture detect the right line more accurately.
+
+**2.2 Sobel operator**
+
+A Sobel operator is an edge-detection algorithm that computed and detect high gradient in a given direction by doing a 2-D convolution over the image
+(Applying the Sobel operator to an image is a way of taking the derivative of the image in the x or y direction.)
