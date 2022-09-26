@@ -87,4 +87,4 @@ The following image shows how I extract the yellow lines:
 
 <img src ="output_images/HLS-color_Images.png">
 
-I found that extracting only the pixels between 170 and 255 would suit this problem quite well.
+I found that extracting only the pixels between 90 and 255 would suit this problem quite well.
