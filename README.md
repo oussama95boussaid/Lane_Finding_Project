@@ -141,3 +141,4 @@ Each pixel of the resulting image contains a value for the angle of the gradient
 
 <img src ="output_images/Thresholded_Grad_Dir.png">
 
+**2.4 Combining Thresholds**
