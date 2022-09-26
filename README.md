@@ -142,3 +142,9 @@ Each pixel of the resulting image contains a value for the angle of the gradient
 <img src ="output_images/Thresholded_Grad_Dir.png">
 
 **2.4 Combining Thresholds**
+
+(use various aspects of your gradient measurements (x, y, magnitude, direction) to isolate lane-line pixels)
+
+I'used thresholds of the x and y gradients, the overall gradient magnitude, and the gradient direction to focus on pixels that are likely to be part of the lane lines.
+
+<img src ="output_images/Combining_Thresholds.png">
