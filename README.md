@@ -101,3 +101,6 @@ A Sobel operator is an edge-detection algorithm that computed and detect high gr
 (Applying the Sobel operator to an image is a way of taking the derivative of the image in the x or y direction.)
 
 In this case, I chose to detect pixels which luminance (channel L of HLS color space) returns a high gradient in the x direction since the lines I am trying to detect are generally vertical in the image.
+
+<img src ="output_images/Thresholded_x-derivative.png">
+
