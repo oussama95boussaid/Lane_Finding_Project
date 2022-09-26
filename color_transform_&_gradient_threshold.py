@@ -89,7 +89,7 @@ show_image(UndistHLS_images)
 
 """**Sobel Operator**
 
-The Sobel operator is at the heart of the Canny edge detection algorithm you used in the Introductory Lesson. Applying the Sobel operator to an image is a way of taking the derivative of the image in the x or y direction. 
+The Sobel operator is at the heart of the Canny edge detection algorithm.Applying the Sobel operator to an image is a way of taking the derivative of the image in the x or y direction. 
 """
 
 def abs_sobel_thresh(img, orient='x', thresh_min=0, thresh_max=255):
