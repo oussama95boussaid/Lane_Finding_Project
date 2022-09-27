@@ -207,5 +207,11 @@ I verified that my perspective transform was working as expected by drawing the 
 
 <img src ="output_images/Undistorted_ Warped.png">
 
-	
-	
+
+
+**4. Lane Pixels Identification**
+
+After obtaining the binarized image and transform its perspective to look at the road form the top, I need to decide which pixels belong to the lane. For the first image I compute a histogram of every pixels in the bottom half of image along the x axis and detect the 2 highest values on each sides. They give me the start of the lane.
+
+<img src ="output_images/hist-of-binary-image.png">
+
