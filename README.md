@@ -220,3 +220,6 @@ Then, I iteratively create some bounding boxes (in green) and add the position o
 At the end, I chose to color every pixels found for the left line in red and the ones for the right line in blue.
 
 Here is the result:
+
+<img src ="output_images/binary_warped.png">
+
