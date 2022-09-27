@@ -227,5 +227,5 @@ Here is the result:
 
 The yellow line in the middle of each lines are polynomials that are fitting each of the colored lines.
 
-<img src ="output_images/color_fit_lines.png">
+<img src ="output_images/color_fit_lines.jpg">
 
