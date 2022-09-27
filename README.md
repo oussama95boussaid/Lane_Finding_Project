@@ -215,3 +215,8 @@ After obtaining the binarized image and transform its perspective to look at the
 
 <img src ="output_images/hist-of-binary-image.png">
 
+Then, I iteratively create some bounding boxes (in green) and add the position of each pixels inside them to be part of the line. The center of the next box is the average x position of all of the pixels in the current box. That position is shown by the blue line.
+
+At the end, I chose to color every pixels found for the left line in red and the ones for the right line in blue.
+
+Here is the result:
