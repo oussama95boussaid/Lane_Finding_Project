@@ -211,9 +211,11 @@ I verified that my perspective transform was working as expected by drawing the 
 
 **4. Lane Pixels Identification**
 
-After obtaining the binarized image and transform its perspective to look at the road form the top, I need to decide which pixels belong to the lane. For the first image I compute a histogram of every pixels in the bottom half of image along the x axis and detect the 2 highest values on each sides. They give me the start of the lane.
+After obtaining the binarized image and transform its perspective to look at the road form the top, I need to decide which pixels belong to the lane. For the first image I compute a histogram of every pixels in the bottom half of image along the x axis and detect the 2 highest values on each sides. They give me the start of the lane. (function **find_firstlane()**)
 
 <img src ="output_images/hist-of-binary-image.png">
+
+After the initial line is detected, we can continue searching for the new location of the lane line starting in the area where the current line was detected. (function **search_next_Lane()**)
 
 Then, I iteratively create some bounding boxes (in green) and add the position of each pixels inside them to be part of the line. The center of the next box is the average x position of all of the pixels in the current box. That position is shown by the blue line.
 
