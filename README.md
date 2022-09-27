@@ -207,5 +207,7 @@ I verified that my perspective transform was working as expected by drawing the 
 
 <img src ="output_images/Undistorted_ Warped.png">
 
-	
+
+
+**4. Lane Pixels Identification**
 	
