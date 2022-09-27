@@ -27,7 +27,7 @@ cameraCalibrationImgs = pickle.load( open( "Camera_Calibration.p", "rb" ) )
 mtx = cameraCalibrationImgs["mtx"]
 dist = cameraCalibrationImgs["dist"]
 
-# ! unzip test_images
+! unzip test_images
 
 # Load test images using glob.
 # read test images using cv2.imread .
@@ -105,7 +105,26 @@ def hls_select(img, thresh=(0, 255)):
     binary_output[(s_channel > thresh[0]) & (s_channel <= thresh[1])] = 1
     return binary_output
 
+def l_select(img, thresh=(0, 255)):
+
+    '''
+    This function thresholds the S-channel of HLS
+
+    '''
+    hls = cv2.cvtColor(img, cv2.COLOR_RGB2HLS)
+    l_channel = hls[:,:,1]
+
+    binary_output = np.zeros_like(l_channel)
+    binary_output[(l_channel > thresh[0]) & (l_channel <= thresh[1])] = 1
+    return binary_output
+
 # apply hls_select function to Undist_images and pask the images in a list to show
+l_select_imgs = []
+
+for img in Undist_images:
+  l_img = l_select(img, thresh=(200, 255))
+  l_select_imgs.append(l_img)
+
 hls_select_imgs = []
 
 for img in Undist_images:
@@ -113,7 +132,8 @@ for img in Undist_images:
   hls_select_imgs.append(hls_img)
 
 show_image(hls_select_imgs,2,4)
-# plt.savefig("HLS-color_Images.png")
+
+show_image(l_select_imgs,2,4)
 
 """**Sobel Operator**"""
 
@@ -125,17 +145,18 @@ def abs_sobel_thresh(img, orient='x', thresh_min=0, thresh_max=255):
 
     ''' 
     # Convert to HLS color space and get the J channel
+
     hls = cv2.cvtColor(img, cv2.COLOR_RGB2HLS)
     l_channel = hls[:,:,1]
 
-    gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+    # gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
 
     # Apply x or y gradient with the OpenCV Sobel() function
     # and take the absolute value
     if orient == 'x':
-        abs_sobel = np.absolute(cv2.Sobel(gray, cv2.CV_64F, 1, 0))
+        abs_sobel = np.absolute(cv2.Sobel(l_channel, cv2.CV_64F, 1, 0))
     if orient == 'y':
-        abs_sobel = np.absolute(cv2.Sobel(gray, cv2.CV_64F, 0, 1))
+        abs_sobel = np.absolute(cv2.Sobel(l_channel, cv2.CV_64F, 0, 1))
     # Rescale back to 8 bit integer
     scaled_sobel = np.uint8(255*abs_sobel/np.max(abs_sobel))
     # Create a copy and apply the threshold
@@ -395,7 +416,10 @@ def find_firstlane(binary_warped) :
         left_fit_cr = np.polyfit(lefty*ym_per_pix, leftx*xm_per_pix, 2)
         right_fit_cr = np.polyfit(righty*ym_per_pix, rightx*xm_per_pix, 2)
 
-        
+        out_img[lefty, leftx] = [255, 0, 0]
+        out_img[righty, rightx] = [0, 0, 255]
+
+    
         return out_img, left_fit,right_fit, left_fit_cr, right_fit_cr
 
 def search_next_Lane(binary_warped,left_fit,right_fit) :
@@ -434,9 +458,11 @@ def search_next_Lane(binary_warped,left_fit,right_fit) :
 
         # Create an image to draw on 
         out_img = np.dstack((binary_warped, binary_warped, binary_warped))*255
-         # Color in left and right line pixels
-        out_img[nonzeroy[left_lane_inds], nonzerox[left_lane_inds]] = [255, 0, 0]
-        out_img[nonzeroy[right_lane_inds], nonzerox[right_lane_inds]] = [0, 0, 255]
+        # Color in left and right line pixels
+
+        out_img[lefty, leftx] = [255, 0, 0]
+        out_img[righty, rightx] = [0, 0, 255]
+
 
         return out_img, left_fit, right_fit, left_fit_cr,right_fit_cr
 
@@ -465,6 +491,18 @@ def draw(binary_warped,left_fit, right_fit, Minv) :
 
         return newwarp
 
+def find_firstlane_ouput(binary_warped,left_fit,right_fit) :
+        # Generate x and y values for plotting
+        ploty = np.linspace(0, binary_warped.shape[0]-1, binary_warped.shape[0] )
+        left_fitx =( left_fit[0]*ploty**2 + left_fit[1]*ploty + left_fit[2])
+        right_fitx = right_fit[0]*ploty**2 + right_fit[1]*ploty + right_fit[2]
+
+        # Plots the left and right polynomials on the lane lines
+        plt.plot(left_fitx, ploty, color='yellow')
+        plt.plot(right_fitx, ploty, color='yellow')
+
+        return binary_warped
+
 def measure_curvature(left_fit_cr,right_fit_cr) :
 
     '''
@@ -486,6 +524,12 @@ def measure_curvature(left_fit_cr,right_fit_cr) :
     right_curverad = ((1 + (2*right_fit_cr[0]*y_eval*ym_per_pix + right_fit_cr[1])**2)**1.5) / np.absolute(2*right_fit_cr[0])
 
     return left_curverad,right_curverad
+
+# Here i'm showing an exmple 
+out_img,left_fit,right_fit,lcr,rcr = find_firstlane(Warped_imgs[0])
+out_img_ex = find_firstlane_ouput(out_img,left_fit,right_fit)
+plt.imshow(out_img_ex)
+# plt.savefig("binary_warped.png")
 
 """**Find The Lanes** & **Draw The Frames**"""
 
