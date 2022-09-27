@@ -152,7 +152,7 @@ I'used thresholds of the x and y gradients, the overall gradient magnitude, and 
 <img src ="output_images/Combining_Thresholds.png">
 
 
-**3. Perspective Transformation**
+# Perspective Transformation
 
 The perspective transformation code could be found on <a href= "Perspective_Transformation.ipynb">Perspective_Transformation.ipynb</a> notebook. 
 
@@ -209,7 +209,7 @@ I verified that my perspective transform was working as expected by drawing the 
 
 
 
-**4. Lane Pixels Identification**
+# Lane Pixels Identification
 
 After obtaining the binarized image and transform its perspective to look at the road form the top, I need to decide which pixels belong to the lane. For the first image I compute a histogram of every pixels in the bottom half of image along the x axis and detect the 2 highest values on each sides. They give me the start of the lane. (function **find_firstlane()**)
 
