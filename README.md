@@ -241,3 +241,49 @@ After the initial line is detected, we can continue searching for the new locati
 (I do not need to use the previous method that would be described as blind detection. I use the polynomials and only look at the area nearby.)
 
 <img src ="output_images/Search-from-Prior.png">
+
+I extend each polynomials by a margin (50 pixels) on both sides, add every non zero pixels within that region and fit a new polynomial on top of that.
+
+	def search_next_Lane(binary_warped,left_fit,right_fit) :
+        
+        # HYPERPARAMETER
+        # Choose the width of the margin around the previous polynomial to search
+        margin = 100
+
+        # Grab activated pixels
+        nonzero = binary_warped.nonzero()
+        nonzeroy = np.array(nonzero[0])
+        nonzerox = np.array(nonzero[1])
+
+        # the area of search based on activated x-values 
+        # within the +/- margin of our polynomial function 
+        left_lane_inds = ((nonzerox > (left_fit[0]*(nonzeroy**2) + left_fit[1]*nonzeroy + 
+                          left_fit[2] - margin)) & (nonzerox < (left_fit[0]*(nonzeroy**2) + 
+                           left_fit[1]*nonzeroy + left_fit[2] + margin))) 
+
+        right_lane_inds = ((nonzerox > (right_fit[0]*(nonzeroy**2) + right_fit[1]*nonzeroy + 
+                           right_fit[2] - margin)) & (nonzerox < (right_fit[0]*(nonzeroy**2) + 
+                           right_fit[1]*nonzeroy + right_fit[2] + margin)))  
+
+        # Again, extract left and right line pixel positions
+        leftx = nonzerox[left_lane_inds]
+        lefty = nonzeroy[left_lane_inds] 
+        rightx = nonzerox[right_lane_inds]
+        righty = nonzeroy[right_lane_inds]
+        
+        # Fit a second order polynomial to each
+        left_fit = np.polyfit(lefty, leftx, 2)
+        right_fit = np.polyfit(righty, rightx, 2)
+        
+        left_fit_cr = np.polyfit(lefty*ym_per_pix, leftx*xm_per_pix, 2)
+        right_fit_cr = np.polyfit(righty*ym_per_pix, rightx*xm_per_pix, 2)
+
+        # Create an image to draw on 
+        out_img = np.dstack((binary_warped, binary_warped, binary_warped))*255
+        # Color in left and right line pixels
+
+        out_img[lefty, leftx] = [255, 0, 0]
+        out_img[righty, rightx] = [0, 0, 255]
+
+
+        return out_img, left_fit, right_fit, left_fit_cr,right_fit_cr
