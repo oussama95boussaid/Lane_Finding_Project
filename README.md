@@ -242,7 +242,7 @@ After the initial line is detected, we can continue searching for the new locati
 
 <img src ="output_images/Search-from-Prior.png">
 
-I extend each polynomials by a margin (50 pixels) on both sides, add every non zero pixels within that region and fit a new polynomial on top of that.
+I extend each polynomials by a margin (100 pixels) on both sides, add every non zero pixels within that region and fit a new polynomial on top of that.
 
 	def search_next_Lane(binary_warped,left_fit,right_fit) :
         
