@@ -217,7 +217,6 @@ After obtaining the binarized image and transform its perspective to look at the
 
 <img src ="output_images/hist-of-binary-image.png">
 
-After the initial line is detected, we can continue searching for the new location of the lane line starting in the area where the current line was detected. (function **search_next_Lane()**)
 
 Then, I iteratively create some bounding boxes (in green) and add the position of each pixels inside them to be part of the line. The center of the next box is the average x position of all of the pixels in the current box. That position is shown by the blue line.
 
@@ -237,3 +236,8 @@ After obtaining both polynomials:
 
 <img src ="output_images/color_fit_lines.jpg">
 
+After the initial line is detected, we can continue searching for the new location of the lane line starting in the area where the current line was detected. (function **search_next_Lane()**)
+
+(I do not need to use the previous method that would be described as blind detection. I use the polynomials and only look at the area nearby.)
+
+<img src ="output_images/color_fit_lines.jpg">
