@@ -211,6 +211,8 @@ I verified that my perspective transform was working as expected by drawing the 
 
 # Lane Pixels Identification
 
+**1. First frame**
+
 After obtaining the binarized image and transform its perspective to look at the road form the top, I need to decide which pixels belong to the lane. For the first image I compute a histogram of every pixels in the bottom half of image along the x axis and detect the 2 highest values on each sides. They give me the start of the lane. (function **find_firstlane()**)
 
 <img src ="output_images/hist-of-binary-image.png">
@@ -226,6 +228,8 @@ Here is the result:
 <img src ="output_images/binary_warped.png">
 
 The yellow line in the middle of each lines are polynomials that are fitting each of the colored lines.
+
+**2. Subsequent frames**
 
 <img src ="output_images/color_fit_lines.jpg">
 
