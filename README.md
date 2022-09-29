@@ -240,4 +240,4 @@ After the initial line is detected, we can continue searching for the new locati
 
 (I do not need to use the previous method that would be described as blind detection. I use the polynomials and only look at the area nearby.)
 
-<img src ="output_images/color_fit_lines.jpg">
+<img src ="output_images/Search-from-Prior.jpg">
