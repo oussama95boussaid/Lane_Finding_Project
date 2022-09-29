@@ -287,3 +287,6 @@ I extend each polynomials by a margin (100 pixels) on both sides, add every non 
 
 
         return out_img, left_fit, right_fit, left_fit_cr,right_fit_cr
+	
+	
+# Radius of curvature
