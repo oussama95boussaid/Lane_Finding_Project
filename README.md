@@ -228,13 +228,13 @@ Here is the result:
 
 The yellow line in the middle of each lines are polynomials that are fitting each of the colored lines.
 
+<img src ="output_images/color_fit_lines.jpg">
+
 **2. Subsequent frames**
 
 After obtaining both polynomials:
 
 	x = a * y^2 + b * y + c
-
-<img src ="output_images/color_fit_lines.jpg">
 
 After the initial line is detected, we can continue searching for the new location of the lane line starting in the area where the current line was detected. (function **search_next_Lane()**)
 
