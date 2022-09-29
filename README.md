@@ -231,5 +231,9 @@ The yellow line in the middle of each lines are polynomials that are fitting eac
 
 **2. Subsequent frames**
 
+After obtaining both polynomials:
+
+	x = a * y^2 + b * y + c
+
 <img src ="output_images/color_fit_lines.jpg">
 
