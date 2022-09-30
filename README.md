@@ -296,3 +296,5 @@ The code for that function is the following:
 The whole purpose of detecting a lane is to compute a lane curvature and from it a command to steer the wheel to control the car. The radius of curvature is computed at the bottom of the image, point closest to the car.
 
 This is performed by the function
+
+		def measure_curvature(left_fit_cr,right_fit_cr) 
