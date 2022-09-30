@@ -320,3 +320,8 @@ The pixel values of the lane are scaled into meters using the scaling factors de
 
 	ym_per_pix = 30/720 # meters per pixel in y dimension
 	xm_per_pix = 3.7/700 # meters per pixel in x dimension
+	
+These values are then used to compute the polynomial coefficients in meters and then the formula given in the lectures is used to compute the radius of curvature.
+
+	left_curverad = ((1 + (2*left_fit_cr[0]*y_eval*ym_per_pix + left_fit_cr[1])**2)**1.5) / np.absolute(2*left_fit_cr[0])
+	right_curverad = ((1 + (2*right_fit_cr[0]*y_eval*ym_per_pix + right_fit_cr[1])**2)**1.5) / np.absolute(2*right_fit_cr[0])
