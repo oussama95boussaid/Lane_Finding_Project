@@ -320,7 +320,7 @@ This is performed by the function
 
 	    return left_curverad,right_curverad
 
-The pixel values of the lane are scaled into meters (real world space) using the scaling factors ( I used the estimated figures  based on U.S. regulations that require a minimum lane width of 3.6 meters and dashed lane lines of 3 meters long each.) defined as follows :
+The pixel values of the lane are scaled into meters (real world space) using the scaling factors ( I used the estimated figures  based on U.S. regulations that require a **minimum lane width of 3.7 meters and dashed lane lines of 3 meters long each**.) defined as follows :
 
 	ym_per_pix = 30/720 # meters per pixel in y dimension
 	xm_per_pix = 3.7/700 # meters per pixel in x dimension
@@ -329,3 +329,7 @@ These values are then used to compute the polynomial coefficients in meters and 
 
 	left_curverad = ((1 + (2*left_fit_cr[0]*y_eval*ym_per_pix + left_fit_cr[1])**2)**1.5) / np.absolute(2*left_fit_cr[0])
 	right_curverad = ((1 + (2*right_fit_cr[0]*y_eval*ym_per_pix + right_fit_cr[1])**2)**1.5) / np.absolute(2*right_fit_cr[0])
+
+# Final result.
+
+After detecting the lane lines, calculating the radius of curvature, and finding the vehicles position within the lane, I unwarp the image back to the original perspective using the OpenCV warpPerspective() function as before, but this time using the inverse matrix
