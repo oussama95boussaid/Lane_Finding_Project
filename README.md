@@ -293,7 +293,11 @@ The code for that function is the following:
 	
 # Radius of curvature
 
-The whole purpose of detecting a lane is to compute a lane curvature and from it a command to steer the wheel to control the car. The radius of curvature is computed at the bottom of the image, point closest to the car.
+The whole purpose of detecting a lane is to compute a lane curvature and from it a command to steer the wheel to control the car. 
+
+The radius of curvature of the lane at a particular point is defined as the radius of the approximating circle, which changes as we move along the curve. A good tutorial of the radius of curvature can be found <a href="http://www.intmath.com/applications-differentiation/8-radius-curvature.php">here</a> which describes the mathematical formula used to calculate it.
+
+The radius of curvature is computed at the bottom of the image, point closest to the car.
 
 This is performed by the function
 
