@@ -354,6 +354,15 @@ A link to my video result can be found <a href= "project_video_final.mp4">here</
 
 # Discussion
 
+During the implementation of this project I found it very useful to make use of python unittests in order to test the code and in order to calculate and evaluate differnt parameters, e.g. in the context of thresholding. The chosen approach worked pretty well for all three test videos. However, it had some problems in case the surface of the street changes, there is much shadow on the road, lane lines are missing, etc.
+
+Improvements could be:
+
+- consider provious polynoms that were fitted onto the lane lines in order to smoothen lane line detection
+- add sanity checks that kick out values that do nor make sense. In that case the previous polynoms could be reused.
+- the values of the curvature and the position of the car are hardly readable since they change so often. Less frequent update of the values and calculation of the - average over several frames of the video could help.
+- In order to reduce effort for calculation of the thresholds, etc. the images reduced to the area of interest (the street only)
+- There might be a better values for min and max thresholds of the threshold calculation. More finetuning might produce even better results
 - There are a few improvements that could be done on the performance of the process due to repetitive calculations.
 - More information could be use from frame to frame to improve the robustness of the process.
 - Other gradients could be use (Ex. Laplacian) to improve the line detection.
