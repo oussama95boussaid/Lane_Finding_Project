@@ -320,7 +320,7 @@ This is performed by the function
 
 	    return left_curverad,right_curverad
 
-The pixel values of the lane are scaled into meters using the scaling factors defined as follows :
+The pixel values of the lane are scaled into meters (real world space) using the scaling factors ( I used the estimated figures  based on U.S. regulations that require a minimum lane width of 3.6 meters and dashed lane lines of 3 meters long each.) defined as follows :
 
 	ym_per_pix = 30/720 # meters per pixel in y dimension
 	xm_per_pix = 3.7/700 # meters per pixel in x dimension
