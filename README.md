@@ -340,7 +340,6 @@ Here is a final result on a test image :
 
 <img src ="output_images/output.png">
 
-A link to my video result can be found <a href= "project_video_final.mp4">here</a>
 
 # Conclusion
 
@@ -348,4 +347,9 @@ Here is a plantuml activity diagram of my pipeline :
 
 <img src ="output_images/processing.png">
 
+# Pipeline (video)
 
+A link to my video result can be found <a href= "project_video_final.mp4">here</a>
+
+
+# Discussion
