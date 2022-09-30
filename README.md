@@ -332,7 +332,9 @@ These values are then used to compute the polynomial coefficients in meters and 
 
 **Warp Detected Lane Boundaries onto Original Image**
 
-After detecting the lane lines, calculating the radius of curvature, and finding the vehicles position within the lane, I unwarp the image back to the original perspective using the OpenCV warpPerspective() function as before, but this time using the inverse matrix
+After detecting the lane lines, calculating the radius of curvature, and finding the vehicles position within the lane, I unwarp the image back to the original perspective using the OpenCV **warpPerspective()** function as before, but this time using the inverse matrix
+
+**Visual Display of the Lane Boundaries, Curvature, and Vehicle Position**
 
 Here is a final result on a test image :
 
