@@ -354,4 +354,8 @@ A link to my video result can be found <a href= "project_video_final.mp4">here</
 
 # Discussion
 
+- There are a few improvements that could be done on the performance of the process due to repetitive calculations.
+- More information could be use from frame to frame to improve the robustness of the process.
+- Other gradients could be use (Ex. Laplacian) to improve the line detection.
+
 # References
