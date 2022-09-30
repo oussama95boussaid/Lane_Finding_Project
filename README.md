@@ -2,8 +2,6 @@
 
 The goal of this project is to create a powerful pipeline to detect lane lines with raw images from a car's dash cam. The pipeline will visually display the lane boundaries, numerically giving a numerical estimate of the lane curvature.
 
-<img src ="output_images/output.png">
-
 # Dependencies 
 
 **To execute the pipeline, the following dependencies are necessary :**
@@ -152,7 +150,7 @@ I'used thresholds of the x and y gradients, the overall gradient magnitude, and 
 <img src ="output_images/Combining_Thresholds.png">
 
 
-**3. Perspective Transformation**
+# Perspective Transformation
 
 The perspective transformation code could be found on <a href= "Perspective_Transformation.ipynb">Perspective_Transformation.ipynb</a> notebook. 
 
@@ -209,13 +207,14 @@ I verified that my perspective transform was working as expected by drawing the 
 
 
 
-**4. Lane Pixels Identification**
+# Lane Pixels Identification
+
+**1. First frame**
 
 After obtaining the binarized image and transform its perspective to look at the road form the top, I need to decide which pixels belong to the lane. For the first image I compute a histogram of every pixels in the bottom half of image along the x axis and detect the 2 highest values on each sides. They give me the start of the lane. (function **find_firstlane()**)
 
 <img src ="output_images/hist-of-binary-image.png">
 
-After the initial line is detected, we can continue searching for the new location of the lane line starting in the area where the current line was detected. (function **search_next_Lane()**)
 
 Then, I iteratively create some bounding boxes (in green) and add the position of each pixels inside them to be part of the line. The center of the next box is the average x position of all of the pixels in the current box. That position is shown by the blue line.
 
@@ -224,4 +223,129 @@ At the end, I chose to color every pixels found for the left line in red and the
 Here is the result:
 
 <img src ="output_images/binary_warped.png">
+
+The yellow line in the middle of each lines are polynomials that are fitting each of the colored lines.
+
+<img src ="output_images/color_fit_lines.jpg">
+
+**2. Subsequent frames**
+
+After obtaining both polynomials:
+
+	x = a * y^2 + b * y + c
+
+After the initial line is detected, we can continue searching for the new location of the lane line starting in the area where the current line was detected. (function **search_next_Lane()**)
+
+(I do not need to use the previous method that would be described as blind detection. I use the polynomials and only look at the area nearby.)
+
+<img src ="output_images/Search-from-Prior.png">
+
+I extend each polynomials by a margin (100 pixels) on both sides, add every non zero pixels within that region and fit a new polynomial on top of that.
+
+The code for that function is the following:
+
+	def search_next_Lane(binary_warped,left_fit,right_fit) :
+        
+        # HYPERPARAMETER
+        # Choose the width of the margin around the previous polynomial to search
+        margin = 100
+
+        # Grab activated pixels
+        nonzero = binary_warped.nonzero()
+        nonzeroy = np.array(nonzero[0])
+        nonzerox = np.array(nonzero[1])
+
+        # the area of search based on activated x-values 
+        # within the +/- margin of our polynomial function 
+        left_lane_inds = ((nonzerox > (left_fit[0]*(nonzeroy**2) + left_fit[1]*nonzeroy + 
+                          left_fit[2] - margin)) & (nonzerox < (left_fit[0]*(nonzeroy**2) + 
+                           left_fit[1]*nonzeroy + left_fit[2] + margin))) 
+
+        right_lane_inds = ((nonzerox > (right_fit[0]*(nonzeroy**2) + right_fit[1]*nonzeroy + 
+                           right_fit[2] - margin)) & (nonzerox < (right_fit[0]*(nonzeroy**2) + 
+                           right_fit[1]*nonzeroy + right_fit[2] + margin)))  
+
+        # Again, extract left and right line pixel positions
+        leftx = nonzerox[left_lane_inds]
+        lefty = nonzeroy[left_lane_inds] 
+        rightx = nonzerox[right_lane_inds]
+        righty = nonzeroy[right_lane_inds]
+        
+        # Fit a second order polynomial to each
+        left_fit = np.polyfit(lefty, leftx, 2)
+        right_fit = np.polyfit(righty, rightx, 2)
+        
+        left_fit_cr = np.polyfit(lefty*ym_per_pix, leftx*xm_per_pix, 2)
+        right_fit_cr = np.polyfit(righty*ym_per_pix, rightx*xm_per_pix, 2)
+
+        # Create an image to draw on 
+        out_img = np.dstack((binary_warped, binary_warped, binary_warped))*255
+        # Color in left and right line pixels
+
+        out_img[lefty, leftx] = [255, 0, 0]
+        out_img[righty, rightx] = [0, 0, 255]
+
+
+        return out_img, left_fit, right_fit, left_fit_cr,right_fit_cr
+	
+	
+# Radius of curvature
+
+The whole purpose of detecting a lane is to compute a lane curvature and from it a command to steer the wheel to control the car. 
+
+The radius of curvature of the lane at a particular point is defined as the radius of the approximating circle, which changes as we move along the curve. A good tutorial of the radius of curvature can be found <a href="http://www.intmath.com/applications-differentiation/8-radius-curvature.php">here</a> which describes the mathematical formula used to calculate it.
+
+The radius of curvature is computed at the bottom of the image, point closest to the car.
+
+This is performed by the function
+
+	def measure_curvature(left_fit_cr,right_fit_cr) :
+
+	    # Define conversions in x and y from pixels space to meters
+	    ym_per_pix = 30/720 # meters per pixel in y dimension
+	    xm_per_pix = 3.7/700 # meters per pixel in x dimension
+
+	    # cover same y-range as image
+	    ploty = np.linspace(0, 719, num=720)
+
+
+	    y_eval = np.max(ploty)
+
+
+	    # Calculate the new R_curve (radius of curvature)
+	    left_curverad = ((1 + (2*left_fit_cr[0]*y_eval*ym_per_pix + left_fit_cr[1])**2)**1.5) / np.absolute(2*left_fit_cr[0])
+	    right_curverad = ((1 + (2*right_fit_cr[0]*y_eval*ym_per_pix + right_fit_cr[1])**2)**1.5) / np.absolute(2*right_fit_cr[0])
+
+	    return left_curverad,right_curverad
+
+The pixel values of the lane are scaled into meters (real world space) using the scaling factors ( I used the estimated figures  based on U.S. regulations that require a **minimum lane width of 3.7 meters and dashed lane lines of 3 meters long each**.) defined as follows :
+
+	ym_per_pix = 30/720 # meters per pixel in y dimension
+	xm_per_pix = 3.7/700 # meters per pixel in x dimension
+	
+These values are then used to compute the polynomial coefficients in meters and then the formula given in the lectures is used to compute the radius of curvature.
+
+	left_curverad = ((1 + (2*left_fit_cr[0]*y_eval*ym_per_pix + left_fit_cr[1])**2)**1.5) / np.absolute(2*left_fit_cr[0])
+	right_curverad = ((1 + (2*right_fit_cr[0]*y_eval*ym_per_pix + right_fit_cr[1])**2)**1.5) / np.absolute(2*right_fit_cr[0])
+
+# Final result
+
+**Warp Detected Lane Boundaries onto Original Image**
+
+After detecting the lane lines, calculating the radius of curvature, and finding the vehicles position within the lane, I unwarp the image back to the original perspective using the OpenCV **warpPerspective()** function as before, but this time using the inverse matrix
+
+**Visual Display of the Lane Boundaries, Curvature, and Vehicle Position**
+
+Here is a final result on a test image :
+
+<img src ="output_images/output.png">
+
+A link to my video result can be found <a href= "project_video_final.mp4">here</a>
+
+# Conclusion
+
+Here is a plantuml activity diagram of my pipeline :
+
+<img src ="output_images/processing.png">
+
 
