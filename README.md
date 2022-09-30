@@ -346,6 +346,6 @@ A link to my video result can be found <a href= "project_video_final.mp4">here</
 
 Here is a plantuml activity diagram of my pipeline :
 
-<img src ="output_images/output.png">
+<img src ="output_images/processing.png">
 
 
