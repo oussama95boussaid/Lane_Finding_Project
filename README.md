@@ -2,8 +2,6 @@
 
 The goal of this project is to create a powerful pipeline to detect lane lines with raw images from a car's dash cam. The pipeline will visually display the lane boundaries, numerically giving a numerical estimate of the lane curvature.
 
-<img src ="output_images/output.png">
-
 # Dependencies 
 
 **To execute the pipeline, the following dependencies are necessary :**
@@ -330,6 +328,13 @@ These values are then used to compute the polynomial coefficients in meters and 
 	left_curverad = ((1 + (2*left_fit_cr[0]*y_eval*ym_per_pix + left_fit_cr[1])**2)**1.5) / np.absolute(2*left_fit_cr[0])
 	right_curverad = ((1 + (2*right_fit_cr[0]*y_eval*ym_per_pix + right_fit_cr[1])**2)**1.5) / np.absolute(2*right_fit_cr[0])
 
-# Final result.
+# Final result
+
+**Warp Detected Lane Boundaries onto Original Image**
 
 After detecting the lane lines, calculating the radius of curvature, and finding the vehicles position within the lane, I unwarp the image back to the original perspective using the OpenCV warpPerspective() function as before, but this time using the inverse matrix
+
+Here is a final result on a test image :
+
+<img src ="output_images/output.png">
+
