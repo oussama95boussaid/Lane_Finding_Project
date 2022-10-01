@@ -369,7 +369,7 @@ Improvements could be:
 
 # References
 
-Please, the links below can be of great help for more information on camera calibration :
+Please, the links below can be of great help for more information :
 
 - <a href="https://docs.opencv.org/2.4/modules/calib3d/doc/camera_calibration_and_3d_reconstruction.html">Camera Calibration and 3D Reconstruction</a>
 - <a href="https://docs.opencv.org/2.4/doc/tutorials/calib3d/camera_calibration/camera_calibration.html">Camera calibration With OpenCV</a>
