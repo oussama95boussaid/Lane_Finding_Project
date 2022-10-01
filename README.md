@@ -374,5 +374,7 @@ Please, the links below can be of great help for more information on camera cali
 - <a href="https://docs.opencv.org/2.4/modules/calib3d/doc/camera_calibration_and_3d_reconstruction.html">Camera Calibration and 3D Reconstruction</a>
 - <a href="https://docs.opencv.org/2.4/doc/tutorials/calib3d/camera_calibration/camera_calibration.html">Camera calibration With OpenCV</a>
 - <a href="https://docs.opencv.org/3.1.0/dc/dbb/tutorial_py_calibration.html">Camera Calibration</a>
-
+- <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.457.535&rep=rep1&type=pdf">Performance evaluation of edge detection techniques for images in spatial domain</a>
+- <a href="https://pdfs.semanticscholar.org/2bce/94e1f0d921d6876cf346103f5f3e121bfdd8.pdf">Gradient-enhancing conversion for illumination-robust lane detection</a>
+- <a href="http://escholarship.org/uc/item/1bg5f8qd">Video-based lane estimation and tracking for driver assistance: survey, system, and evaluation. </a>
 
